@@ -8,7 +8,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Env
+    - uses: actions/checkout@v2
+
+    - id: Print Env
       shell: bash
       run: export
 
@@ -30,7 +32,7 @@ runs:
         BRIDGE_TOKEN: ${{ inputs.token }}
       run: jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
 
-    - name: List Artifacts
+    - name: Print Artifact List
       shell: bash
       run: ls -lh ./artifacts
 
