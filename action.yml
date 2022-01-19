@@ -35,6 +35,7 @@ runs:
         # Job
         echo ::group::Job log
         jenkins-bridge-client -token "$BRIDGE_TOKEN" -printlog 1
+        echo ""
         echo ::endgroup::
 
     - name: Download Artifacts
