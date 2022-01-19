@@ -8,15 +8,18 @@ runs:
       run: export
 
     - name: Install Client
+      shell: bash
       run: |
         wget --quiet https://repo.peeweep.de/tmp/jenkins-bridge-client -O /usr/bin/jenkins-bridge-client
         chmod +x -v /usr/bin/jenkins-bridge-client
 
     - name: Print log
+      shell: bash
       env:
         BRIDGE_TOKEN: ${{ secrets.BridgeToken }}
 
     - name: Download Artifacts
+      shell: bash
       run: |
         jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
         ls -lh ./artifacts
