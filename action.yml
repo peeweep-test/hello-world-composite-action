@@ -4,8 +4,6 @@ inputs:
   secrets: # id of input
     description: "github secrets"
     required: true
-    default:
-      token: ""
 runs:
   using: "composite"
   steps:
