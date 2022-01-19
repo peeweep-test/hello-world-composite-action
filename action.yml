@@ -13,7 +13,8 @@ runs:
     - name: Print Env
       shell: bash
       run: |
-        echo ::group::print environment
+        # Print Env
+        echo ::group::Environment
         export
         echo ::endgroup::
 
@@ -21,17 +22,18 @@ runs:
       shell: bash
       run: |
         # Install Client
-        echo ::group::install client
+        echo ::group::Install Client Log
         sudo wget --quiet https://repo.peeweep.de/tmp/jenkins-bridge-client -O /usr/bin/jenkins-bridge-client
         sudo chmod +x -v /usr/bin/jenkins-bridge-client
         echo ::endgroup::
 
-    - name: Print log
+    - name: Job
       shell: bash
       env:
         BRIDGE_TOKEN: ${{ inputs.token }}
       run: |
-        echo ::group::Build Output
+        # Job
+        echo ::group::Job log
         jenkins-bridge-client -token "$BRIDGE_TOKEN" -printlog 1
         echo ::endgroup::
 
@@ -40,7 +42,8 @@ runs:
       env:
         BRIDGE_TOKEN: ${{ inputs.token }}
       run: |
-        echo ::group::Download Artifacts
+        # Download Artifacts
+        echo ::group::Download Artifacts Log
         jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
         ls -lh ./artifacts
         echo ::endgroup::
