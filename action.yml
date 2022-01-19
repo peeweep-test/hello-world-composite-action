@@ -20,6 +20,7 @@ runs:
     - name: Install Client
       shell: bash
       run: |
+        # Install Client
         echo ::group::install client
         sudo wget --quiet https://repo.peeweep.de/tmp/jenkins-bridge-client -O /usr/bin/jenkins-bridge-client
         sudo chmod +x -v /usr/bin/jenkins-bridge-client
