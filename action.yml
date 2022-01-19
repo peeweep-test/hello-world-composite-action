@@ -10,11 +10,11 @@ runs:
   steps:
     - uses: actions/checkout@v2
 
-    - name: Print Env
+    - name: Print Environment
       shell: bash
       run: |
         # Print Env
-        echo ::group::Environment
+        echo ::group::Print Environment Log
         export
         echo ::endgroup::
 
