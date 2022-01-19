@@ -1,6 +1,10 @@
 name: "jenkine bridge"
 description: "trigger jenkine pipeline"
-
+inputs:
+  token: # id of input
+    description: "api auth token"
+    required: true
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -17,12 +21,15 @@ runs:
     - name: Print log
       shell: bash
       env:
-        BRIDGE_TOKEN: ${{ secrets.BridgeToken }}
+        BRIDGE_TOKEN: ${{ inputs.token }}
       run: jenkins-bridge-client -token "$BRIDGE_TOKEN" -printlog 1
 
     - name: Download Artifacts
       shell: bash
+      env:
+        BRIDGE_TOKEN: ${{ inputs.token }}
       run: jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
+
     - name: List Artifacts
       shell: bash
       run: ls -lh ./artifacts
