@@ -1,10 +1,10 @@
 name: "jenkine bridge"
 description: "trigger jenkine pipeline"
 inputs:
-  secrets: # id of input
-    description: "github secrets"
+  token: # id of input
+    description: "api auth token"
     required: true
-
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -30,7 +30,7 @@ runs:
     - name: Job
       shell: bash
       env:
-        BRIDGE_TOKEN: ${{ inputs.secrets.token }}
+        BRIDGE_TOKEN: ${{ inputs.token }}
       run: |
         # Job
         echo ::group::Job log
