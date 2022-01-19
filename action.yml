@@ -1,21 +1,27 @@
-name: "Hello World"
-description: "Greet someone"
-inputs:
-  who-to-greet: # id of input
-    description: "Who to greet"
-    required: true
-    default: "World"
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
+name: "jenkine bridge"
+description: "trigger jenkine pipeline"
+
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
-      shell: bash
+    - name: Env
+      run: export
+
+    - name: Install Client
+      run: |
+        wget --quiet https://repo.peeweep.de/tmp/jenkins-bridge-client -O /usr/bin/jenkins-bridge-client
+        chmod +x -v /usr/bin/jenkins-bridge-client
+
+    - name: Print log
+      env:
+        BRIDGE_TOKEN: ${{ secrets.BridgeToken }}
+
+    - name: Download Artifacts
+      run: |
+        jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
+        ls -lh ./artifacts
+
+    - uses: peeweep-test/upload-artifact@single-artifact-upload
+      with:
+        path: ./artifacts/*.deb
+        single-archive: "false"
