@@ -18,12 +18,14 @@ runs:
       shell: bash
       env:
         BRIDGE_TOKEN: ${{ secrets.BridgeToken }}
+      run: jenkins-bridge-client -token "$BRIDGE_TOKEN" -printlog 1
 
     - name: Download Artifacts
       shell: bash
-      run: |
-        jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
-        ls -lh ./artifacts
+      run: jenkins-bridge-client -token "$BRIDGE_TOKEN" -downloadArtifacts 1
+    - name: List Artifacts
+      shell: bash
+      run: ls -lh ./artifacts
 
     - uses: peeweep-test/upload-artifact@single-artifact-upload
       with:
