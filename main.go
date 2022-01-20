@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/bradleyfalzon/ghinstallation"
@@ -14,12 +15,18 @@ import (
 
 func main() {
 	privateKey := []byte(os.Getenv("PRIVATE_KEY"))
-	repositor := os.Getenv("GITHUB_REPOSITORY")
 	var appID, installationID int64
-	flag.Int64Var(&appID, "app_id", 164400, "github app id")
-	flag.Int64Var(&installationID, "installation_id", 22221748, "github installation id")
+	var src, dest, message string
+	flag.Int64Var(&appID, "app_id", 0, "*github app id")
+	flag.Int64Var(&installationID, "installation_id", 0, "*github installation id")
+	flag.StringVar(&message, "message", "chore: Sync by "+os.Getenv("GITHUB_REPOSITORY"), "*commit message")
+	flag.StringVar(&src, "src", "", "*src path")
+	flag.StringVar(&dest, "dest", "", "*dest path")
 	flag.Parse()
-
+	if appID == 0 || installationID == 0 || len(src) == 0 || len(dest) == 0 {
+		flag.PrintDefaults()
+		return
+	}
 	itr, err := ghinstallation.New(http.DefaultTransport, appID, installationID, []byte(privateKey))
 	if err != nil {
 		panic(err)
@@ -27,13 +34,16 @@ func main() {
 	client := github.NewClient(&http.Client{Transport: itr})
 	ctx := context.Background()
 
-	owner := "peeweep-test"
-	repo := "test-action"
-	path := "hello"
+	arr := strings.SplitN(dest, "/", 3)
+	if len(arr) != 3 {
+		log.Fatal("wrong dist. example: username/repo/file")
+	}
+	owner := arr[0]
+	repo := arr[1]
+	path := arr[2]
 
 	fileContent, _, resp, err := client.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
-		log.Println(err)
 		if resp.StatusCode != http.StatusNotFound {
 			panic(err)
 		}
@@ -42,11 +52,9 @@ func main() {
 	if fileContent != nil {
 		sha = fileContent.GetSHA()
 	}
-	log.Println("exists file:", fileContent)
-	message := "chore: Sync by " + repositor
 	content := []byte(time.Now().String())
-	_, _, err = client.Repositories.UpdateFile(ctx,
-		owner, repo, path,
+	_, _, err = client.Repositories.UpdateFile(
+		ctx, owner, repo, path,
 		&github.RepositoryContentFileOptions{
 			Message: &message,
 			Content: content,
