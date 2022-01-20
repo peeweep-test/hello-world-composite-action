@@ -7,6 +7,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-go@v2
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
@@ -20,16 +21,7 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+      - name: Go Version
+        run: go version
       - name: Sync all changed files
-        run: |
-          repo=repos/peeweep-test/test-action
-          for file in $(cat $repo); do
-              repo=${repo#"repos"}
-              echo sync $file to $repo/$line
-              content=`cat $file | base64`
-              curl -X PUT \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-                  "https://api.github.com/repos/peeweep-test/test-action/contents/$line" \
-                  -d '{"message":"message","content":"'$content'"}'
-          done
+        run: go run .
