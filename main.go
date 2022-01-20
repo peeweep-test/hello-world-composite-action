@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -27,6 +28,7 @@ func main() {
 	ctx := context.Background()
 	fileContent, _, resp, err := client.Repositories.GetContents(ctx, "peeweep-test", "test-action", "hello1", nil)
 	if err != nil {
+		log.Println(err)
 		if resp.StatusCode != http.StatusNotFound {
 			panic(err)
 		}
@@ -35,6 +37,7 @@ func main() {
 	if fileContent != nil {
 		sha = fileContent.GetSHA()
 	}
+	log.Println("exists file:", fileContent)
 	message := "chore: Sync by " + repositor
 	content := []byte(time.Now().String())
 	_, _, err = client.Repositories.UpdateFile(ctx,
