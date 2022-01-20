@@ -96,6 +96,7 @@ func sendFile(ctx context.Context, client *github.Client, localFile string, owne
 	if err != nil {
 		panic(err)
 	}
+	log.Println(owner, repo, path, message, sha)
 	_, _, err = client.Repositories.UpdateFile(
 		ctx, owner, repo, path,
 		&github.RepositoryContentFileOptions{
