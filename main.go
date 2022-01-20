@@ -18,7 +18,7 @@ func main() {
 	flag.Int64Var(&appID, "app_id", 164400, "github app id")
 	flag.Int64Var(&installationID, "installation_id", 22221748, "github installation id")
 
-	flag.StringVar(&privateKey, "private_key", os.Getenv("private_key"), "")
+	flag.StringVar(&privateKey, "private_key", os.Getenv("PRIVATE_KEY"), "")
 	flag.Parse()
 
 	log.Println("ok", privateKey[:10])
