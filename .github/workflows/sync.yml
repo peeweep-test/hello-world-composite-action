@@ -23,6 +23,6 @@ jobs:
         run: go version
 
       - name: Sync all changed files
-        run: go run . -app_id 164400 -installation_id 22221748 -src .github/workflows/jenkine-bridge.yml -dest peeweep-test/test-action/.github/workflows/jenkine-bridge.yml
+        run: go run . -app_id 164400 -installation_id 22221748
         env:
           PRIVATE_KEY: ${{secrets.APP_PRIVATE_KEY}}
