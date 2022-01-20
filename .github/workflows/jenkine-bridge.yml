@@ -1,3 +1,4 @@
+name: jenkine bridge
 on:
   workflow_call:
     secrets:
