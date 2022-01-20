@@ -12,25 +12,18 @@ import (
 )
 
 func main() {
-	var privateKey string
 	var appID, installationID int64
 
 	flag.Int64Var(&appID, "app_id", 164400, "github app id")
 	flag.Int64Var(&installationID, "installation_id", 22221748, "github installation id")
 
-	flag.StringVar(&privateKey, "private_key", os.Getenv("PRIVATE_KEY"), "")
 	flag.Parse()
 
-	log.Println("ok", privateKey[:10])
-	itr, err := ghinstallation.NewKeyFromFile(
-		http.DefaultTransport,
-		appID, installationID,
-		privateKey,
-	)
+	itr, err := ghinstallation.New(http.DefaultTransport, appID, installationID, []byte(os.Getenv("PRIVATE_KEY")))
 	if err != nil {
 		panic(err)
-		// Handle error.
 	}
+
 	client := github.NewClient(&http.Client{Transport: itr})
 	client.Repositories.UpdateFile(context.Background(),
 		"peeweep-test", "test-action", "hello",
