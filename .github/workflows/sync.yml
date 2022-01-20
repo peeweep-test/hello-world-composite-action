@@ -23,5 +23,8 @@ jobs:
           done
       - name: Go Version
         run: go version
+        
       - name: Sync all changed files
         run: go run .
+        env:
+          PRIVATE_KEY: ${{secrets.APP_PRIVATE_KEY}}
