@@ -26,7 +26,12 @@ func main() {
 	}
 	client := github.NewClient(&http.Client{Transport: itr})
 	ctx := context.Background()
-	fileContent, _, resp, err := client.Repositories.GetContents(ctx, "peeweep-test", "test-action", "hello1", nil)
+
+	owner := "peeweep-test"
+	repo := "test-action"
+	path := "hello"
+
+	fileContent, _, resp, err := client.Repositories.GetContents(ctx, owner, repo, path, nil)
 	if err != nil {
 		log.Println(err)
 		if resp.StatusCode != http.StatusNotFound {
@@ -41,7 +46,7 @@ func main() {
 	message := "chore: Sync by " + repositor
 	content := []byte(time.Now().String())
 	_, _, err = client.Repositories.UpdateFile(ctx,
-		"peeweep-test", "test-action", "hello",
+		owner, repo, path,
 		&github.RepositoryContentFileOptions{
 			Message: &message,
 			Content: content,
