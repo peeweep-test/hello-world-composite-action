@@ -1,0 +1,10 @@
+[
+  {
+    "Name": ".github/sync-file",
+    "Repos": ["peeweep-test/test-action", "peeweep-test/supersm"]
+  },
+  {
+    "Name": ".github/sync-file2",
+    "Repos": ["peeweep-test/test-action", "peeweep-test/supersm"]
+  }
+]
