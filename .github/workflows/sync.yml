@@ -1,4 +1,3 @@
-// 同步workflows配置到其他仓库中
 on:
   push:
   workflow_dispatch:
